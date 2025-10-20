@@ -1,0 +1,17 @@
+{
+  "name": "ong-plataforma",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "EMPTY_OUT=1 PAGE=index vite build && PAGE=projetos vite build && PAGE=cadastro vite build && node scripts/patch-html.js",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "vite": "^7.1.10"
+  }
+}

@@ -27,7 +27,7 @@
     <main>
         <h2>Formulário de Cadastro</h2>
         
-        <form action="#" method="post">
+        <form id="cadastro-form" action="#" method="post">
             <fieldset>
                 <legend>Dados Pessoais</legend>
                 
@@ -38,20 +38,20 @@
                 <input type="email" id="email" name="email" required autocomplete="email" placeholder="seuemail@exemplo.com">
                 
                 <label for="cpf">CPF:</label>
-                <input type="text" id="cpf" name="cpf" required pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="000.000.000-00">
+                <input type="text" id="cpf" name="cpf" required pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="000.000.000-00" maxlength="14">
                 
                 <label for="telefone">Telefone:</label>
-                <input type="tel" id="telefone" name="telefone" required pattern="\(\d{2}\) \d{5}-\d{4}" placeholder="(00) 00000-0000">
+                <input type="tel" id="telefone" name="telefone" required pattern="\(\d{2}\) \d{5}-\d{4}" placeholder="(00) 00000-0000" maxlength="15">
                 
                 <label for="nascimento">Data de Nascimento:</label>
-                <input type="date" id="nascimento" name="nascimento" required>
+                <input type="date" id="nascimento" name="nascimento" required autocomplete="bday">
             </fieldset>
 
             <fieldset>
                 <legend>Endereço</legend>
                 
                 <label for="cep">CEP:</label>
-                <input type="text" id="cep" name="cep" required pattern="\d{5}-\d{3}" placeholder="00000-000">
+                <input type="text" id="cep" name="cep" required pattern="\d{5}-\d{3}" placeholder="00000-000" maxlength="9">
                 
                 <label for="endereco">Endereço:</label>
                 <input type="text" id="endereco" name="endereco" required placeholder="Rua, número e complemento">
@@ -107,5 +107,15 @@
             </ul>
         </nav>
     </footer>
+
+    <div id="success-modal" class="modal-overlay">
+        <div class="modal">
+            <h2>✅ Cadastro Realizado com Sucesso!</h2>
+            <p>Obrigado por se cadastrar como voluntário da ONG Vida Nova. Em breve entraremos em contato com você.</p>
+            <button id="close-modal-btn" type="button">Fechar</button>
+        </div>
+    </div>
+
+    <script type="module" src="js/main.js" defer></script>
 </body>
 </html>

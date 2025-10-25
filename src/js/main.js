@@ -1,24 +1,20 @@
 import { initRouter } from './router.js';
 import { renderProjects } from './templates.js';
 import { initFormValidation } from './form.js';
-import { initModal, initLazyLoading } from './ui.js';
+import { initLazyLoading } from './ui.js';
+import { initTheme } from './theme.js';
 
 export function initializeDynamicContent(container) {
     const cleanupFunctions = [];
     const projectContainer = container.querySelector('#projects-container');
     const cadastroForm = container.querySelector('#cadastro-form');
-    const successModal = document.querySelector('#success-modal');
-    const closeModalBtn = document.querySelector('#close-modal-btn');
 
     if (projectContainer) {
         renderProjects('#projects-container');
     }
     if (cadastroForm) {
-        initFormValidation('#cadastro-form');
-    }
-    if (successModal && closeModalBtn) {
-        const modalCleanup = initModal('#success-modal', '#close-modal-btn');
-        cleanupFunctions.push(modalCleanup);
+        const formCleanup = initFormValidation('#cadastro-form');
+        cleanupFunctions.push(formCleanup);
     }
 
     initLazyLoading(container);
@@ -29,6 +25,7 @@ export function initializeDynamicContent(container) {
 }
 
 function initializeApp() {
+    initTheme();
     initRouter(initializeDynamicContent);
 }
 

@@ -1,7 +1,16 @@
-import { showModal } from './ui.js';
+import { showModal, initModal } from './ui.js';
+
+const modalHTMLString = `
+<div id="success-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+        <h2 id="modal-title">✅ Cadastro Realizado com Sucesso!</h2>
+        <p>Obrigado por se cadastrar como voluntário da ONG Vida Nova. Em breve entraremos em contato com você.</p>
+        <button id="close-modal-btn" type="button">Fechar</button>
+    </div>
+</div>`;
 
 function maskCPF(value) {
-    value = value.replace(/\D/g, ''); // Remove tudo que não é dígito
+    value = value.replace(/\D/g, '');
     value = value.replace(/(\d{3})(\d)/, '$1.$2');
     value = value.replace(/(\d{3})(\d)/, '$1.$2');
     value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
@@ -56,28 +65,27 @@ function isAdult(isoDate) {
     return age >= 18;
 }
 
-function addInputMasks(form) {
+function addInputMasks(form, signal) {
     const cpfInput = form.querySelector('#cpf');
     const cepInput = form.querySelector('#cep');
     const telefoneInput = form.querySelector('#telefone');
-    const nascimentoInput = form.querySelector('#nascimento');
     
     if (cpfInput) {
         cpfInput.addEventListener('input', (e) => {
             e.target.value = maskCPF(e.target.value);
-        });
+        }, { signal });
     }
     
     if (cepInput) {
         cepInput.addEventListener('input', (e) => {
             e.target.value = maskCEP(e.target.value);
-        });
+        }, { signal });
     }
     
     if (telefoneInput) {
         telefoneInput.addEventListener('input', (e) => {
             e.target.value = maskPhone(e.target.value);
-        });
+        }, { signal });
     }
 }
 
@@ -89,6 +97,8 @@ function clearErrorMessages() {
 function showError(field, message) {
     const alert = document.createElement('div');
     alert.className = 'alert alert-error';
+    alert.setAttribute('role', 'alert');
+    alert.setAttribute('aria-live', 'assertive');
     alert.textContent = message;
     
     field.parentElement.insertBefore(alert, field.nextSibling);
@@ -123,33 +133,58 @@ function handleSubmit(event) {
     
     const form = event.target;
     
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        clearErrorMessages();
-        return;
-    }
-    if (validateForm(form)) {
-        showModal('#success-modal');
-        
-        setTimeout(() => {
-            form.reset();
-        }, 2000);
-    } else {
-        const firstError = document.querySelector('.alert-error');
+    const nativeValid = form.checkValidity();
+    const customValid = nativeValid ? validateForm(form) : false;
+
+    if (!nativeValid || !customValid) {
+        if (!nativeValid) {
+            form.reportValidity();
+        }
+        const firstError = document.querySelector('.alert-error') || form.querySelector(':invalid');
         if (firstError) {
             firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+        return;
     }
+
+    showModal('#success-modal');
+    
+    setTimeout(() => {
+        form.reset();
+    }, 2000);
 }
 
 export function initFormValidation(formSelector) {
     const form = document.querySelector(formSelector);
     
     if (!form) {
-        return;
+        return () => {};
     }
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = modalHTMLString;
+    const modalElement = tempDiv.firstElementChild;
     
-    addInputMasks(form);
+    let modalCleanup = () => {};
+
+    if (!document.getElementById('success-modal')) {
+        document.body.appendChild(modalElement);
+        modalCleanup = initModal('#success-modal', '#close-modal-btn');
+    }
+
+    const controller = new AbortController();
+    const { signal } = controller;
     
-    form.addEventListener('submit', handleSubmit);
+    addInputMasks(form, signal);
+    
+    form.addEventListener('submit', handleSubmit, { signal });
+    
+    return () => {
+        controller.abort(); 
+        modalCleanup(); 
+        const modalOnDom = document.getElementById('success-modal');
+        if (modalOnDom) {
+            document.body.removeChild(modalOnDom);
+        }
+    };
 }

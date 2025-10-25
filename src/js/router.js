@@ -37,6 +37,10 @@ async function loadPage(url) {
             try { await exitAnim.finished; } catch (_) {}
 
             currentMain.innerHTML = newMain.innerHTML;
+            
+            if (!currentMain.hasAttribute('aria-live')) {
+                currentMain.setAttribute('aria-live', 'polite');
+            }
 
             const enterAnim = currentMain.animate([
                 { opacity: 0, transform: 'translateY(30px) scale(0.95)', filter: 'blur(5px)' },
@@ -61,6 +65,15 @@ async function loadPage(url) {
             });
 
             currentPageCleanup = pageInitializer(currentMain);
+
+            const mainHeading = currentMain.querySelector('h2');
+            if (mainHeading) {
+                mainHeading.setAttribute('tabindex', '-1');
+                mainHeading.focus();
+                mainHeading.addEventListener('blur', () => {
+                    mainHeading.removeAttribute('tabindex');
+                }, { once: true });
+            }
 
             window.scrollTo(0, 0);
         }

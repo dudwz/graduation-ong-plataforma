@@ -2,7 +2,7 @@ import { resolve } from "path";
 import { defineConfig } from "vite";
 
 const root = "src";
-const outDir = "../dist";
+const outDir = "../docs";
 
 export default defineConfig(({ command, mode }) => {
   const page = process.env.PAGE;

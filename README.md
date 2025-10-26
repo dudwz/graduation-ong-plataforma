@@ -10,8 +10,6 @@ Este projeto vai além de um site estático simples. Ele implementa uma arquitet
 
 [**https://dudwz.github.io/graduation-ong-plataforma/**](https://dudwz.github.io/graduation-ong-plataforma/)
 
-*(Nota: O deploy foi feito a partir da pasta `dist/` gerada pelo script de build.)*
-
 ## ✨ Destaques Técnicos (Funcionalidades)
 
 * **Arquitetura de Modo Duplo (SPA & Estático):**
@@ -97,4 +95,4 @@ Este projeto foi desenvolvido seguindo 4 entregas progressivas:
 
 ## ⚖️ Licença
 
-Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](https://www.google.com/search?q=LICENSE) para mais detalhes.
+Este projeto está licenciado sob a Licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.

@@ -50,7 +50,7 @@ Este projeto pode ser executado de duas maneiras:
 
 1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/dudwz/graduation-ong-plataforma.git](https://github.com/dudwz/graduation-ong-plataforma.git)
+    git clone https://github.com/dudwz/graduation-ong-plataforma.git
     cd graduation-ong-plataforma
     ```
 2.  **Instale as dependências:**
